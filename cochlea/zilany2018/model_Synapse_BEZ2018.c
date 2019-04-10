@@ -397,8 +397,12 @@ int SpikeGenerator(double *synout, double tdres, double t_rd_rest, double t_rd_i
 
     randInputArray[0] = mxCreateDoubleMatrix(1, 2, mxREAL); /* Generate 1x2 array and returns pointer */
     randDims = mxGetPr(randInputArray[0]);
+    /* Dimensions should be 1 x randBufLen */
     randDims[0] = 1;
     randDims[1] = randBufLen;
+
+    /* Call matlab rand function to generate an array of random
+       numbers that with the dimensions (1 x randBufLen)*/
     mexCallMATLAB(1, randOutputArray, 1, randInputArray, "rand");
     randNums = mxGetPr(randOutputArray[0]);
     randBufIndex = 0;
