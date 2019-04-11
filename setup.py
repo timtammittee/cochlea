@@ -37,6 +37,15 @@ extensions = [
             "cochlea/zilany2014/complex.c"
         ]
     ),
+    Extension(
+        "cochlea.zilany2018._zilany2018",
+        [
+            "cochlea/zilany2018/_zilany2018.pyx",
+            "cochlea/zilany2018/model_IHC_BEZ2018.c",
+            "cochlea/zilany2018/model_Synapse_BEZ2018.c",
+            "cochlea/zilany2018/complex.c"
+        ]
+    ),
 ]
 
 

@@ -150,37 +150,28 @@ def _run_channel(args):
     )
 
 
-    # duration = len(vihc) / fs
-    # anf_types = np.repeat(['hsr', 'msr', 'lsr'], anf_num)
+    duration = len(vihc) / fs
+    anf_types = np.repeat(['hsr', 'msr', 'lsr'], anf_num)
 
-    # synout = {}
-    # trains = []
-    # for anf_type in anf_types:
+    synout = {}
+    trains = []
+    time = 1./fs * np.arange(len(vihc))
+    for anf_type in anf_types:
+        spikes, out = _zilany2018.run_single_an(vihc,
+                                               fs,
+                                               cf,
+                                               anf_type,
+                                               powerlaw,
+                                               ffGn)
 
-    #     if (anf_type not in synout) or ffGn:
-    #         ### Run synapse
-    #         synout[anf_type] = _zilany2014.run_synapse(
-    #             fs=fs,
-    #             vihc=vihc,
-    #             cf=cf,
-    #             anf_type=anf_type,
-    #             powerlaw=powerlaw,
-    #             ffGn=ffGn
-    #         )
+        spikes = time[np.where(spikes!=0)]
 
-    #     ### Run spike generator
-    #     spikes = _zilany2014.run_spike_generator(
-    #         synout=synout[anf_type],
-    #         fs=fs,
-    #     )
-
-
-    #     trains.append({
-    #         'spikes': spikes,
-    #         'duration': duration,
-    #         'cf': args['cf'],
-    #         'type': anf_type
-    #     })
+        trains.append({
+            'spikes': spikes,
+            'duration': duration,
+            'cf': args['cf'],
+            'type': anf_type
+        })
 
 
-    return vihc
+    return trains

@@ -197,7 +197,7 @@ void IHCAN(double *px, double cf, int nrep, double tdres, int totalstim,
 		tauc1    = cohc*(tmptauc1-bmTaumin[0])+bmTaumin[0];  /* time -constant for the signal-path C1 filter */
 		rsigma   = 1/tauc1-1/bmTaumax[0]; /* shift of the location of poles of the C1 filter from the initial positions */
 
-		if (1/tauc1<0.0) mexErrMsgTxt("The poles are in the right-half plane; system is unstable.\n");
+		/* if (1/tauc1<0.0) mexErrMsgTxt("The poles are in the right-half plane; system is unstable.\n"); */
 
 		tauwb = TauWBMax+(tauc1-bmTaumax[0])*(TauWBMax-TauWBMin)/(bmTaumax[0]-bmTaumin[0]);
 
@@ -397,7 +397,7 @@ double C1ChirpFilt(double x, double tdres,double cf, int n, double taumax, doubl
 
 	p[1].x = -sigma0 - rsigma;
 
-	if (p[1].x>0.0) mexErrMsgTxt("The system becomes unstable.\n");
+	/* if (p[1].x>0.0) mexErrMsgTxt("The system becomes unstable.\n"); */
 
 	p[1].y = ipw;
 
@@ -419,7 +419,7 @@ double C1ChirpFilt(double x, double tdres,double cf, int n, double taumax, doubl
 
 	rzero = -CF/tan((C1initphase-phase)/order_of_zero);
 
-    if (rzero>0.0) mexErrMsgTxt("The zeros are in the right-half plane.\n");
+    /* if (rzero>0.0) mexErrMsgTxt("The zeros are in the right-half plane.\n"); */
 
    /*%==================================================  */
 	/*each loop below is for a pair of poles and one zero */
@@ -542,7 +542,7 @@ double C2ChirpFilt(double xx, double tdres,double cf, int n, double taumax, doub
 
 	p[1].x = -sigma0*fcohc;
 
-	if (p[1].x>0.0) mexErrMsgTxt("The system becomes unstable.\n");
+	/* if (p[1].x>0.0) mexErrMsgTxt("The system becomes unstable.\n"); */
 
 	p[1].y = ipw;
 
@@ -563,7 +563,7 @@ double C2ChirpFilt(double xx, double tdres,double cf, int n, double taumax, doub
 	};
 
 	rzero = -CF/tan((C2initphase-phase)/order_of_zero);
-    if (rzero>0.0) mexErrMsgTxt("The zeros are in the right-hand plane.\n");
+    /* if (rzero>0.0) mexErrMsgTxt("The zeros are in the right-hand plane.\n"); */
    /*%==================================================  */
    /*%      time loop begins here                         */
    /*%==================================================  */

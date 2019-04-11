@@ -33,6 +33,7 @@ from cochlea.holmberg2007 import run_holmberg2007
 from cochlea.holmberg2007 import run_holmberg2007_vesicles
 from cochlea.zilany2014 import run_zilany2014
 from cochlea.zilany2014 import run_zilany2014_rate
+from cochlea.zilany2018 import run_zilany2018
 
 
 from cochlea.holmberg2007 import real_freq_map as freq_map_holmberg2007
