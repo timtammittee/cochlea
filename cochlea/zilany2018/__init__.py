@@ -21,7 +21,7 @@ def run_zilany2018(
         powerlaw='approximate',
         ffGn=False
 ):
-    """Run the inner ear model by [Zilany2014]_.
+    """Run the inner ear model by [Bruce2018]_.
 
     This model is based on the original implementation provided by the
     authors.  The MEX specific code was replaced by Python code in C
@@ -70,13 +70,12 @@ def run_zilany2018(
     References
     ----------
     If you are using results of this or modified version of the model
-    in your research, please cite [Zilany2014]_.
+    in your research, please cite [Bruce2018]_.
 
-
-    .. [Zilany2014] Zilany, M. S., Bruce, I. C., & Carney,
-       L. H. (2014). Updated parameters and expanded simulation
-       options for a model of the auditory periphery. The Journal of
-       the Acoustical Society of America, 135(1), 283-286.
+    .. [Bruce2018] Bruce, I. C., Erfani, Y., & Zilany, M. S. (2018). A
+    phenomenological model of the synapse between the inner hair cell
+    and auditory nerve: implications of limited neurotransmitter release
+    sites. Hearing Research, 360(),
 
     """
     assert np.max(sound) < 1000, "Signal should be given in Pa"
@@ -122,9 +121,6 @@ def run_zilany2018(
 
     return spike_trains
 
-
-
-
 def _run_channel(args):
 
     fs = args['fs']
@@ -157,12 +153,12 @@ def _run_channel(args):
     trains = []
     time = 1./fs * np.arange(len(vihc))
     for anf_type in anf_types:
-        spikes, out = _zilany2018.run_single_an(vihc,
-                                               fs,
-                                               cf,
-                                               anf_type,
-                                               powerlaw,
-                                               ffGn)
+        spikes  = _zilany2018.run_single_an(vihc,
+                                            fs,
+                                            cf,
+                                            anf_type,
+                                            powerlaw,
+                                            ffGn)
 
         spikes = time[np.where(spikes!=0)]
 
