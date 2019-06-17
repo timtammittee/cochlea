@@ -208,16 +208,16 @@ def run_single_an(
     cdef double *trel_vector_ptr = <double *>np.PyArray_DATA(trel_vector)
 
     SingleAN(
-        vihc_ptr,                   # input ihc
+        vihc_ptr,               # input ihc
         cf,                     # center frequency
         nrep,                   # nr of reps
         1.0 / fs,               # time resolutino
         len(vihc),              # length of stimulus
-        noise_type,
-        powerlaw_map[powerlaw],
-        spont[anf_type],
-        tabs,
-        trel,
+        noise_type,             # Noise type
+        powerlaw_map[powerlaw], # aproximate or actual power law estimation
+        spont[anf_type],        # spontanious rate
+        tabs,                   # Absolute refractory period
+        trel,                   # Relative refractory period
         mean_rate_ptr,          # Analytical estimate of mean firing rate
         var_rate_ptr,           # Analytical estimate of variance in firing rate
         psth_ptr,               # spiketrain
@@ -392,10 +392,8 @@ cdef public double* decimate(
 
     resampled = filtered[::q]
 
-
     if not resampled.flags['C_CONTIGUOUS']:
         resampled = resampled.copy(order='C')
-
 
     # Copy data to output array
     cdef double *resampled_ptr = <double *>np.PyArray_DATA(resampled)
