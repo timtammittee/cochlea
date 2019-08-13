@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2009-2018 Marek Rudnicki
+# Copyright 2009-2019 Marek Rudnicki
 #
 # This file is part of cochlea.
 #
@@ -40,7 +40,7 @@ from cochlea.holmberg2007 import real_freq_map as freq_map_holmberg2007
 from cochlea.holmberg2007 import get_nearest_cf as get_nearest_cf_holmberg2007
 
 
-__version__ = "1.4"
+__version__ = "2"
 
 
 # Check if running 64-bit version of Python
@@ -48,28 +48,6 @@ if sys.maxsize <= 2**32:
     warnings.warn("cochlea: it seems that you are using 32-bit" +
                   "version of Python." +
                   "If you experience issues, please switch to 64-bit version.")
-
-
-
-print("""
-================================================================
-How to cite *cochlea*:
-
-Rudnicki M. and Hemmert W. (2009—). Cochlea: inner ear models in
-Python.  https://github.com/mrkrd/cochlea/
-
-@Misc{Rudnicki2009-Cochlea,
-  author       = {Rudnicki, M. and Hemmert, W.},
-  title        = {Cochlea: inner ear models in Python},
-  year         = {2009--},
-  howpublished = {https://github.com/mrkrd/cochlea},
-  url          = {https://github.com/mrkrd/cochlea},
-}
-================================================================
-""",
-    file=sys.stderr
-)
-
 
 
 
