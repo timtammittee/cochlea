@@ -1,5 +1,4 @@
-# Copyright 2013-2014 Marek Rudnicki
-
+# Copyright 2013-2014 Joerg Encke, Marek Rudnicki
 # This file is part of cochlea.
 
 # cochlea is free software: you can redistribute it and/or modify
@@ -75,10 +74,7 @@ cdef extern from "numpy/arrayobject.h":
         void* data
     )
 
-
-
 np.import_array()
-
 
 def run_ihc(
         np.ndarray[np.float64_t, ndim=1] signal,
@@ -155,7 +151,8 @@ def run_single_an(
         double cf,
         anf_type='hsr',
         powerlaw='actual',
-        ffGn=True):
+        ffGn=True,
+        return_details=False):
 
     # Nr of repititons if larger then 1 then the output is the psth instead of a spike train
     nrep = 1
@@ -226,130 +223,17 @@ def run_single_an(
         trel_vector_ptr         # mean realtive refractory perido in s for each time bin
     )
 
-    return psth, mean_rate
 
+    detail_dict = {'mean rate' : mean_rate,
+                   'var rate' : var_rate,
+                   'synout' : synout,
+                   'trd vector' : trd_vector,
+                   'trel vector' : trel_vector}
 
-
-# def run_synapse(
-#         np.ndarray[np.float64_t, ndim=1] vihc,
-#         double fs,
-#         double cf,
-#         anf_type='hsr',
-#         powerlaw='actual',
-#         ffGn=True
-# ):
-#     """Run synapse simulation.
-
-#     vihc: IHC receptor potential
-#     cf: characteristic frequency
-#     anf_type: auditory nerve fiber type ('hsr', 'msr' or 'lsr')
-#     powerlaw: implementation of the powerlaw ('actual', 'approximate')
-#     ffGn: enable/disable factorial Gauss noise generator
-
-#     return: PSTH from ANF
-
-#     """
-#     assert (cf > 79.9) and (cf < 40e3), "Wrong CF: 80 <= cf < 40e3, CF = %s"%str(cf)
-#     assert (fs >= 100e3) and (fs <= 500e3), "Wrong Fs: 100e3 <= fs <= 500e3"
-#     assert anf_type in ['hsr', 'msr', 'lsr'], "anf_type not hsr/msr/lsr"
-#     assert powerlaw in ['actual', 'approximate'], "powerlaw not actual/approximate"
-
-#     spont = {
-#         'lsr': 0.1,
-#         'msr': 4.0,
-#         'hsr': 100.0,
-#     }
-
-#     powerlaw_map = {
-#         'actual': 1,
-#         'approximate': 0
-#     }
-
-#     if ffGn:
-#         noise_type = 1.
-#     else:
-#         noise_type = 0.
-
-
-#     # Input IHC voltage
-#     if not vihc.flags['C_CONTIGUOUS']:
-#         vihc = vihc.copy(order='C')
-#     cdef double *vihc_data = <double *>np.PyArray_DATA(vihc)
-
-
-#     # Output synapse data (spiking probabilities)
-#     synout = np.zeros_like(vihc)
-#     cdef double *synout_data = <double *>np.PyArray_DATA(synout)
-
-
-#     # Run synapse model
-#     Synapse(
-#         vihc_data,                   # ihcout
-#         1.0/fs,                      # tdres
-#         cf,                          # cf
-#         len(vihc),                   # totalstim
-#         1,                           # nrep
-#         spont[anf_type],             # spont
-#         noise_type,                  # noiseType
-#         powerlaw_map[powerlaw],      # implnt
-#         10e3,                        # sampFreq
-#         synout_data                  # synouttmp
-#     )
-
-#     return synout
-
-
-# def run_spike_generator(
-#         np.ndarray[np.float64_t, ndim=1] synout,
-#         double fs
-# ):
-#     """Run spike generator.
-
-#     synout: synapse output
-#     fs: sampling frequency
-
-#     return: sptime
-
-#     """
-#     # Input IHC voltage
-#     if not synout.flags['C_CONTIGUOUS']:
-#         synout = synout.copy(order='C')
-#     cdef double *synout_data = <double *>np.PyArray_DATA(synout)
-
-#     # Output spikes (signal)
-#     sptimes = np.zeros(int(np.ceil(len(synout)/0.00075/fs)))
-#     cdef double *sptimes_data = <double *>np.PyArray_DATA(sptimes)
-
-
-#     # Run synapse model
-#     SpikeGenerator(
-#         synout_data,            # synouttmp
-#         1./fs,                  # tdres
-#         len(synout),            # totalstim
-#         1,                      # nprep
-#         sptimes_data            # sptime
-#     )
-
-#     spikes = np.array(sptimes[sptimes != 0])
-
-#     return spikes
-
-
-
-# cdef public double* generate_random_numbers(long length):
-#     arr = np.random.rand(length)
-
-#     if not arr.flags['C_CONTIGUOUS']:
-#         arr = arr.copy(order='C')
-
-#     cdef double *data_ptr = <double *>np.PyArray_DATA(arr)
-#     cdef double *out_ptr = <double *>malloc(length * sizeof(double))
-#     memcpy(out_ptr, data_ptr, length*sizeof(double))
-
-#     return out_ptr
-
-
-
+    # if return_details:
+    #     return psth, detail_dict
+    # else:
+    return psth
 
 cdef public double* decimate(
     int k,
